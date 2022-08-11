@@ -62,7 +62,7 @@ export class LiveReload {
     this.clientMiddleware = clientMiddleware;
     this.socketMiddleware = registerWebsocket(this.websocketServer);
   }
-  watch() {
+  start() {
     const handler = () => {
       console.log('files changed');
       this.websocketServer.sendToAll('change-detected');

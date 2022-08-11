@@ -67,7 +67,7 @@ export class DenoLivereloadLite {
       ...this.options.middleware,
       serveStatic(this.options.path, { ...contentTypeMappings, ...this.options.contentTypeOverrides }),
     )
-    this.liveReload.watch();
+    this.liveReload.start();
     await this.httpServer.start();
   }
   close() {
