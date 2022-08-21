@@ -1,5 +1,5 @@
 
-export class WebSocketServer {
+export class WebsocketHandler {
   connections = new Set<WebSocket>();
   logConnectionCount() {
     console.log(`Socket connections: ${this.connections.size}`);

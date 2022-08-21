@@ -1,11 +1,17 @@
 export type ResponseHook = (response: Response, context: Context) => Response | Promise<Response>;
 
+export interface ContextResponse {
+  body: BodyInit,
+  responseInit: ResponseInit;
+}
 export class Context {
   orig: Deno.RequestEvent;
   url: URL;
   filePath: string;
   responseHeaders = new Headers();
   responseHook: ResponseHook;
+  query: Record<string, string> = {};
+  get method() { return this.orig.request.method }
   constructor(
     requestEvent: Deno.RequestEvent,
     responseHook: ResponseHook,

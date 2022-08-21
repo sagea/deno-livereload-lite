@@ -1,4 +1,4 @@
-import { step, fn, expect, mock } from '../testUtils.ts';
+import { step, fn, expect, mock } from '../../testUtils/mod.ts';
 import { Context, ResponseHook } from '../Context.ts';
 
 Deno.test('Context', async t => {

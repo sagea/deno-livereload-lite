@@ -1,5 +1,5 @@
 import { extname } from 'https://deno.land/std@0.151.0/path/mod.ts';
-import { Middleware } from "../middleware.ts";
+import { Middleware } from "./middleware.ts";
 
 export const serveStatic = (path: string, contentTypeMappings: Record<string, string>): Middleware => async(ctx) => {
   let filePath = ctx.filePath;

@@ -1,4 +1,4 @@
-import { step, fn, expect } from '../testUtils.ts';
+import { step, fn, expect } from '../../testUtils/mod.ts';
 import { middlewareRunner, BaseMiddleware } from '../middleware.ts';
 
 Deno.test('middleware runner', async (t) => {
