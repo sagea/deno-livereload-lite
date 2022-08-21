@@ -15,14 +15,14 @@ export const runnerActions = {
       customRoutes: [
         {
           path: '/any-method',
-          middleware: (ctx, next) => {
+          middleware: (ctx) => {
             ctx.respondWith(new Response('bro', { status: 200 }));
           },
         },
         {
           methods: ['GET', 'POST'],
           path: '/haha',
-          middleware: (ctx, next) => {
+          middleware: (ctx) => {
             ctx.respondWith(new Response('haha', { status: 200 }));
           },
         },

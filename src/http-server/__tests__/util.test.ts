@@ -19,7 +19,7 @@ Deno.test('pathMatcher', async (t) => {
       },
     );
   });
-  await step(t, 'should accept dynamic params', (t) => {
+  await step(t, 'should accept dynamic params', _ => {
     const matcher = pathMatcher('/foo/:bro/:woah');
     expect(matcher('/foo/a/b')).toEqual({ bro: 'a', woah: 'b' });
     expect(matcher('/foo/a')).toEqual(false);
@@ -27,7 +27,7 @@ Deno.test('pathMatcher', async (t) => {
     expect(matcher('/foo//b')).toEqual(false);
   });
 
-  await step(t, 'should accept *', (t) => {
+  await step(t, 'should accept *', _ => {
     const matcher = pathMatcher('/foo/*');
     expect(matcher('/foo/a/b')).toEqual({});
     expect(matcher('/foo/a')).toEqual({});

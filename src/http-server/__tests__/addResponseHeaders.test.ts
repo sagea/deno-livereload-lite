@@ -1,4 +1,4 @@
-import { expect, fn, mock, step } from '../../testUtils/mod.ts';
+import { expect, fn, step } from '../../testUtils/mod.ts';
 import { addResponseHeaders } from '../addResponseHeaders.ts';
 
 Deno.test('addResponseHeaders', async (t) => {

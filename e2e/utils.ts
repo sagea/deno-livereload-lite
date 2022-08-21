@@ -1,4 +1,3 @@
-import { expect, step } from '../src/testUtils/mod.ts';
 import { dirname } from 'https://deno.land/std@0.54.0/path/mod.ts';
 import { ensureDir } from 'https://deno.land/std@0.152.0/fs/mod.ts';
 import type { Options } from '../src/mod.ts';
@@ -68,7 +67,7 @@ export const startServer = async (
       );
       await pre.blob();
       if (pre.status === 418) break;
-    } catch (err) {}
+    } catch (_err) {}
     await sleep(500);
   }
   return app;
@@ -79,6 +78,6 @@ export const close = async (item?: { close: () => any }) => {
   await sleep(500);
   try {
     await item.close();
-  } catch (err) {}
+  } catch (_err) {}
   await sleep(500);
 };

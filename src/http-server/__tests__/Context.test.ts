@@ -29,7 +29,7 @@ Deno.test('Context', async (t) => {
       async (t) => {
         const mockReturnResponse = new Response('hello');
         const mockGivenResponse = new Response('haha');
-        const responseHook = fn<ResponseHook>((res) => mockReturnResponse);
+        const responseHook = fn<ResponseHook>(() => mockReturnResponse);
         const requestEvent = {
           request: {
             url: 'http://localhost:8080/woahdude/haha.js?woah=true',
@@ -63,8 +63,8 @@ Deno.test('Context', async (t) => {
       async (t) => {
         const mockReturnResponse = new Response('hello');
         const mockGivenResponse = new Response('haha');
-        const responseHook = fn<ResponseHook>(async (res) =>
-          mockReturnResponse
+        const responseHook = fn<ResponseHook>(async () =>
+          await mockReturnResponse
         );
         const requestEvent = {
           request: {
@@ -96,7 +96,7 @@ Deno.test('Context', async (t) => {
   await step(
     t,
     'workflow: responseHeaders should add headers to response',
-    async (t) => {
+    async _ => {
       const requestEvent = {
         request: {
           url: 'http://localhost:8080/woahdude/haha.js?woah=true',

@@ -40,7 +40,7 @@ const addLinesToAssertionError = async (
     const assertion = [...start, space, ...end].join('\n');
     assertionError.message += '\n' + assertion;
     return assertionError;
-  } catch (err) {
+  } catch (_err) {
     return assertionError;
   }
 };

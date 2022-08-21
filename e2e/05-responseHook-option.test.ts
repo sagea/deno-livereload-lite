@@ -1,6 +1,6 @@
 import { expect, step } from '../src/testUtils/mod.ts';
 import { ensureDir } from 'https://deno.land/std@0.152.0/fs/mod.ts';
-import { close, sleep, startServer, TestFileManager } from './utils.ts';
+import { close, startServer, TestFileManager } from './utils.ts';
 
 Deno.test('05-responseHook-option', async (t) => {
   await ensureDir('./e2e/test-artifacts');

@@ -28,7 +28,7 @@ export class Context {
     this.responseHook = responseHook;
   }
   async respondWith(response: Response) {
-    for (let [key, value] of this.responseHeaders) {
+    for (const [key, value] of this.responseHeaders) {
       response.headers.set(key, value);
     }
     this.orig.respondWith(await this.responseHook(response, this));

@@ -34,7 +34,7 @@ export class DenoLivereloadLite {
     //  TODO: Come up with a better solution to validate that the server is live.
     this.httpServer.get(
       '/129422f3-685f-4518-b9fe-a506059fcc8b-endpoint-to-validate-server-is-running-for-testing',
-      (ctx, next) => {
+      (ctx) => {
         ctx.respondWith(new Response('ok', { status: 418 }));
       },
     );
@@ -71,9 +71,9 @@ export class DenoLivereloadLite {
       }),
     );
   }
-  async start() {
+  start() {
     this.liveReload.start();
-    await this.httpServer.start();
+    this.httpServer.start();
   }
   close() {
     this.liveReload?.close();
