@@ -10,9 +10,9 @@ export class FileWatcher {
     public callback: (events: Deno.FsEvent[]) => any,
   ) {}
   start() {
-    this.watcher = nativeWatch(this.path, event => {
-      console.log(">>>> event", event);
-      clearTimeout(this.activeTimeout)
+    this.watcher = nativeWatch(this.path, (event) => {
+      console.log('>>>> event', event);
+      clearTimeout(this.activeTimeout);
       this.activeTimeout = setTimeout(() => {
         this.callback(this.collectedChanges);
         this.collectedChanges = [];

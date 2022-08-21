@@ -1,7 +1,10 @@
-export type ResponseHook = (response: Response, context: Context) => Response | Promise<Response>;
+export type ResponseHook = (
+  response: Response,
+  context: Context,
+) => Response | Promise<Response>;
 
 export interface ContextResponse {
-  body: BodyInit,
+  body: BodyInit;
   responseInit: ResponseInit;
 }
 export class Context {
@@ -11,7 +14,9 @@ export class Context {
   responseHeaders = new Headers();
   responseHook: ResponseHook;
   query: Record<string, string> = {};
-  get method() { return this.orig.request.method }
+  get method() {
+    return this.orig.request.method;
+  }
   constructor(
     requestEvent: Deno.RequestEvent,
     responseHook: ResponseHook,
@@ -28,6 +33,10 @@ export class Context {
     }
     this.orig.respondWith(await this.responseHook(response, this));
   }
-  get request() { return this.orig.request; }
-  get headers() { return this.orig.request.headers }
+  get request() {
+    return this.orig.request;
+  }
+  get headers() {
+    return this.orig.request.headers;
+  }
 }

@@ -1,5 +1,5 @@
-import { Middleware } from "../http-server/mod.ts";
-import { WebsocketHandler } from "../websocket/mod.ts";
+import { Middleware } from '../http-server/mod.ts';
+import { WebsocketHandler } from '../websocket/mod.ts';
 import { FileWatcher } from '../file-watcher/mod.ts';
 import { clientMiddlewareCreator } from './clientMiddlewareCreator.ts';
 import { registerWebsocket } from './registerWebsocket.ts';

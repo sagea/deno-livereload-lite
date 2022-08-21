@@ -4,11 +4,11 @@ export const runnerActions = {
     return {
       middleware: [
         (ctx, next) => {
-          ctx.responseHeaders.append('woah', 'bro')
+          ctx.responseHeaders.append('woah', 'bro');
           next();
-        }
-      ]
-    } as Partial<Options>
+        },
+      ],
+    } as Partial<Options>;
   },
   'custom-routes': () => {
     return {
@@ -17,17 +17,17 @@ export const runnerActions = {
           path: '/any-method',
           middleware: (ctx, next) => {
             ctx.respondWith(new Response('bro', { status: 200 }));
-          }
+          },
         },
         {
           methods: ['GET', 'POST'],
           path: '/haha',
           middleware: (ctx, next) => {
             ctx.respondWith(new Response('haha', { status: 200 }));
-          }
-        }
-      ]
-    } as Partial<Options>
+          },
+        },
+      ],
+    } as Partial<Options>;
   },
   'custom-response-basic-hook': () => {
     return {
@@ -36,8 +36,8 @@ export const runnerActions = {
         return new Response(result + '\n\nadd-ending-to-hook', {
           headers: response.headers,
           status: response.status,
-        })
-      }
-    } as Partial<Options>
-  }
+        });
+      },
+    } as Partial<Options>;
+  },
 } as const;

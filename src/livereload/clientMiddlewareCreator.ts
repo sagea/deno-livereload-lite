@@ -1,4 +1,4 @@
-import { Middleware, url, method } from "../http-server/mod.ts";
+import { method, Middleware, url } from '../http-server/mod.ts';
 export const clientMiddlewareCreator = (): Middleware => {
   return [
     method('get'),
@@ -37,7 +37,6 @@ export const clientMiddlewareCreator = (): Middleware => {
         })();
       `;
       await ctx.respondWith(new Response(text, { status: 200 }));
-    }
-    
-  ]
-}
+    },
+  ];
+};

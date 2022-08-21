@@ -1,12 +1,11 @@
-import { step, expect } from '../src/testUtils/mod.ts';
-import { dirname } from "https://deno.land/std@0.54.0/path/mod.ts";
-import { ensureDir } from "https://deno.land/std@0.152.0/fs/mod.ts";
+import { expect, step } from '../src/testUtils/mod.ts';
+import { dirname } from 'https://deno.land/std@0.54.0/path/mod.ts';
+import { ensureDir } from 'https://deno.land/std@0.152.0/fs/mod.ts';
 import type { Options } from '../src/mod.ts';
 import { runnerActions } from './runner-actions.ts';
 
-
 export class TestFileManager {
-  basePath = `./e2e/test-artifacts/${Math.random()}/`
+  basePath = `./e2e/test-artifacts/${Math.random()}/`;
   async start() {
     await ensureDir(this.basePath);
   }
@@ -41,8 +40,12 @@ export class TestFileManager {
     return await Deno.readTextFile(fullPath);
   }
 }
-export const sleep = async (timer: number) => new Promise(resolve => setTimeout(resolve, timer));
-export const startServer = async (options: Partial<Options>, extra: Array<keyof typeof runnerActions> = []) => {
+export const sleep = (timer: number) =>
+  new Promise((resolve) => setTimeout(resolve, timer));
+export const startServer = async (
+  options: Partial<Options>,
+  extra: Array<keyof typeof runnerActions> = [],
+) => {
   const runner = `
     import { DenoLivereloadLite } from './src/mod.ts';
     import { runnerActions } from './e2e/runner-actions.ts';
@@ -55,19 +58,21 @@ export const startServer = async (options: Partial<Options>, extra: Array<keyof 
       Object.assign(options, runnerActions[action]());
     });
     new DenoLivereloadLite(options).start();
-  `.trim().split('\n').map(i => i.trim()).join('');
-  const app = Deno.run({ cmd: ['deno', 'eval', runner] })
-  
+  `.trim().split('\n').map((i) => i.trim()).join('');
+  const app = Deno.run({ cmd: ['deno', 'eval', runner] });
+
   for (let i = 0; i < 10; i++) {
     try {
-      const pre = await fetch(`http://localhost:${options.port}/129422f3-685f-4518-b9fe-a506059fcc8b-endpoint-to-validate-server-is-running-for-testing`)
+      const pre = await fetch(
+        `http://localhost:${options.port}/129422f3-685f-4518-b9fe-a506059fcc8b-endpoint-to-validate-server-is-running-for-testing`,
+      );
       await pre.blob();
       if (pre.status === 418) break;
     } catch (err) {}
     await sleep(500);
   }
   return app;
-}
+};
 
 export const close = async (item?: { close: () => any }) => {
   if (!item) return;
@@ -76,4 +81,4 @@ export const close = async (item?: { close: () => any }) => {
     await item.close();
   } catch (err) {}
   await sleep(500);
-}
+};

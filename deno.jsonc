@@ -1,0 +1,22 @@
+{
+  "rules": {
+    "tags": ["recommended"],
+    "include": [
+      "ban-untagged-todo",
+      ""
+    ],
+    "exclude": ["no-unused-vars"]
+  },
+  "fmt": {
+    "files": {
+      "include": ["."]
+    },
+    "options": {
+      "singleQuote": true,
+      "indentWidth": 2,
+      "lineWidth": 80,
+      "proseWrap": "never",
+      "useTabs": false
+    }
+  }
+}

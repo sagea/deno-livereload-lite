@@ -1,4 +1,4 @@
-import { Middleware, ResponseHook, Methods } from "../http-server/mod.ts";
+import { Methods, Middleware, ResponseHook } from '../http-server/mod.ts';
 
 export interface CustomRouteOption {
   methods?: Methods | Methods[];
@@ -40,6 +40,6 @@ export const processOptions = (providedOptions: Partial<Options>) => {
     middleware,
     globalResponseHeaders,
     contentTypeOverrides,
-    customRoutes
+    customRoutes,
   } as Options;
-}
+};

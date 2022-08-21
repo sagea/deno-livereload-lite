@@ -7,5 +7,5 @@ export const pathMatcher = (pathToMatch: string) => {
     const result = regex.exec(path);
     if (!result) return false;
     return result.groups || {};
-  }
-}
+  };
+};

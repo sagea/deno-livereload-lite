@@ -1,4 +1,3 @@
 export { DenoLivereloadLite } from './DenoLivereloadLite.ts';
 
-export type { Options, CustomRouteOption } from './options.ts';
-
+export type { CustomRouteOption, Options } from './options.ts';

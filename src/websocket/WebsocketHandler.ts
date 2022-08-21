@@ -1,4 +1,4 @@
-import { nativeUpgradeWebSocket } from './nativeUpgradeWebSocket.ts'
+import { nativeUpgradeWebSocket } from './nativeUpgradeWebSocket.ts';
 export class WebsocketHandler {
   connections = new Set<WebSocket>();
   logConnectionCount() {
@@ -17,27 +17,27 @@ export class WebsocketHandler {
       this.logConnectionCount();
     }
   }
-  sendToAll<T extends string>(data: T){
+  sendToAll<T extends string>(data: T) {
     for (const connection of this.connections) {
       console.log('emitting');
       connection.send(data);
     }
   }
-  handleRequest(requestEvent: Deno.RequestEvent){
+  handleRequest(requestEvent: Deno.RequestEvent) {
     const { socket, response } = nativeUpgradeWebSocket(requestEvent.request);
     socket.onopen = () => {
-      console.log('onopen')
+      console.log('onopen');
       this.addConnection(socket);
-    }
+    };
     socket.onclose = () => {
-      console.log('onclose')
+      console.log('onclose');
       this.removeConnection(socket);
-    }
+    };
     socket.onerror = (e) => {
       console.log('Socket error');
       console.error(e);
       this.removeConnection(socket);
-    }
+    };
     requestEvent.respondWith(response);
   }
   close() {
