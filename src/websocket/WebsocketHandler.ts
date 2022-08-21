@@ -1,4 +1,4 @@
-
+import { nativeUpgradeWebSocket } from './nativeUpgradeWebSocket.ts'
 export class WebsocketHandler {
   connections = new Set<WebSocket>();
   logConnectionCount() {
@@ -24,8 +24,7 @@ export class WebsocketHandler {
     }
   }
   handleRequest(requestEvent: Deno.RequestEvent){
-    const { socket, response } = Deno.upgradeWebSocket(requestEvent.request);
-    console.log('here');
+    const { socket, response } = nativeUpgradeWebSocket(requestEvent.request);
     socket.onopen = () => {
       console.log('onopen')
       this.addConnection(socket);

@@ -26,7 +26,18 @@ export class DenoLivereloadLite {
       port: this.options.port,
       responseHook: this.options.responseHook,
     });
-
+    // why?
+    //  This exists to check check if the server is up and running without
+    //  risking conflicts for e2e testing. The uuid at the beginning (hopefully)
+    //  ensures that there won't be a conflict.
+    // 
+    //  TODO: Come up with a better solution to validate that the server is live.
+    this.httpServer.get(
+      '/129422f3-685f-4518-b9fe-a506059fcc8b-endpoint-to-validate-server-is-running-for-testing',
+      (ctx, next) => {
+        ctx.respondWith(new Response('ok', { status: 418 }));
+      }
+    )
     this.httpServer.use(
       this.liveReload.clientMiddleware,
       this.liveReload.socketMiddleware,

@@ -16,6 +16,7 @@ export class Context {
     requestEvent: Deno.RequestEvent,
     responseHook: ResponseHook,
   ) {
+    console.log(requestEvent.request.url);
     this.orig = requestEvent;
     this.url = new URL(requestEvent.request.url);
     this.filePath = decodeURIComponent(this.url.pathname);

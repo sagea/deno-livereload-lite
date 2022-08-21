@@ -1,0 +1,1 @@
+awesome foo.js content

@@ -1,6 +1,7 @@
 import { ResponseHook, Context } from './Context.ts';
 import { Middleware, middlewareRunner } from "./middleware.ts";
 import { url, method } from "./route.ts";
+import { nativeHttpServer } from './nativeHttpServer.ts';
 
 export interface HttpServerOptions {
   port: number;
@@ -14,16 +15,14 @@ export class HttpServer {
   constructor(
     public options: HttpServerOptions
   ) {}
-  async start() {
+  start() {
     this.started = true;
-    this.server = Deno.listen({ port: this.options.port });
-    console.log(`File server running on http://localhost:${this.options.port}/`);
-    for await (const conn of this.server) {
+    this.server = nativeHttpServer({ port: this.options.port }, (conn) => {
       this.handleHttp(conn).catch(console.error);
-    }
+    });
+    console.log(`File server running on http://localhost:${this.options.port}/`);
   }
-  async handleHttp(conn: Deno.Conn) {
-    const httpConn = Deno.serveHttp(conn);
+  async handleHttp(httpConn: Deno.HttpConn) {
     for await (const requestEvent of httpConn) {
       const context = new Context(
         requestEvent,

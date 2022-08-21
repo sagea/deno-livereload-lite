@@ -1,3 +1,5 @@
+import { nativeWatch } from './nativeWatch.ts';
+
 export class FileWatcher {
   watcher: Deno.FsWatcher | undefined;
   collectedChanges: Deno.FsEvent[] = [];
@@ -7,20 +9,17 @@ export class FileWatcher {
     public delay: number,
     public callback: (events: Deno.FsEvent[]) => any,
   ) {}
-  async start() {
-    this.watcher = Deno.watchFs(this.path);
-    for await (const event of this.watcher) {
+  start() {
+    this.watcher = nativeWatch(this.path, event => {
       console.log(">>>> event", event);
       clearTimeout(this.activeTimeout)
       this.activeTimeout = setTimeout(() => {
         this.callback(this.collectedChanges);
         this.collectedChanges = [];
       }, this.delay);
-    }
+    });
   }
   close() {
-    if (this.watcher) {
-      this.watcher.close();
-    }
+    this.watcher?.close();
   }
 }
