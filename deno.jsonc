@@ -20,6 +20,9 @@
   },
   "tasks": {
     "test": "deno test -A src/",
-    "test:e2e": "deno test -A e2e/"
+    "test:e2e": "deno test -A e2e/",
+    "lint": "deno lint; deno fmt --check",
+    "format": "deno fmt",
+    "setup": "deno run -A ./setup.ts"
   }
 }
