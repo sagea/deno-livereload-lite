@@ -1,10 +1,12 @@
 {
-  "rules": {
-    "tags": ["recommended"],
-    "include": [
-      "ban-untagged-todo"
-    ],
-    "exclude": ["no-unused-vars"]
+  "compilerOptions": {
+    "strict": true
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "exclude": ["no-explicit-any"]
+    }
   },
   "fmt": {
     "files": {
@@ -19,10 +21,12 @@
     }
   },
   "tasks": {
+    "setup": "deno run -A ./setup.ts",
     "test": "deno test -A src/",
     "test:e2e": "deno test -A e2e/",
-    "lint": "deno lint; deno fmt --check",
+    "lint": "deno lint;",
     "format": "deno fmt",
-    "setup": "deno run -A ./setup.ts"
+    "fmt:check": "deno fmt --check",
+    "typecheck": "deno check src/mod.ts"
   }
 }

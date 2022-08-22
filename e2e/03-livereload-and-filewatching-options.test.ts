@@ -29,25 +29,25 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
         let events: any[] = [];
         websocket.onmessage = (e) => events.push(e.data);
         await sleep(500);
-        await step(t, 'update file', async _ => {
+        await step(t, 'update file', async (_) => {
           await tfm.addFile('./watchfolder/awesome/foo.js', 'data2');
           await sleep(500);
           expect(events).toEqual(['change-detected']);
           events = [];
         });
-        await step(t, 'add new file', async _ => {
+        await step(t, 'add new file', async (_) => {
           await tfm.addFile('./watchfolder/awesome/newfile.js', 'data');
           await sleep(500);
           expect(events).toEqual(['change-detected']);
           events = [];
         });
-        await step(t, 'delete file', async _ => {
+        await step(t, 'delete file', async (_) => {
           await tfm.deleteFile('./watchfolder/awesome/newfile.js');
           await sleep(500);
           expect(events).toEqual(['change-detected']);
           events = [];
         });
-        await step(t, 'update non watched file', async _ => {
+        await step(t, 'update non watched file', async (_) => {
           await tfm.deleteFile('./nowatchfolder/bro/haha.js');
           await sleep(500);
           expect(events).toEqual([]);
@@ -76,7 +76,7 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
         await step(
           t,
           'should watch for changes inside of custom watchPath',
-          async _ => {
+          async (_) => {
             await tfm.addFile('./watchfolder/awesome/foo.js', 'data2');
             await sleep(500);
             expect(events).toEqual(['change-detected']);
@@ -86,7 +86,7 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
         await step(
           t,
           'should ignore file in path but outside of watchPath',
-          async _ => {
+          async (_) => {
             await tfm.addFile('./watchfolder/woah.js', 'data');
             await sleep(500);
             expect(events).toEqual([]);
@@ -111,7 +111,7 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
           './nowatchfolder/bro/haha.js': 'data',
         });
       });
-      await step(t, 'action', async _ => {
+      await step(t, 'action', async (_) => {
         const process = await startServer({
           port: 9999,
           path: tfm.basePath + 'watchfolder',

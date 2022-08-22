@@ -96,7 +96,7 @@ Deno.test('Context', async (t) => {
   await step(
     t,
     'workflow: responseHeaders should add headers to response',
-    async _ => {
+    async (_) => {
       const requestEvent = {
         request: {
           url: 'http://localhost:8080/woahdude/haha.js?woah=true',

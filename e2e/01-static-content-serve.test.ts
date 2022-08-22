@@ -17,16 +17,16 @@ Deno.test('01-static-content-serve', async (t) => {
       port: 9999,
       path: tfm.basePath + 'watchfolder',
     });
-    await step(t, 'should send index.html if path / is provided', async _ => {
+    await step(t, 'should send index.html if path / is provided', async (_) => {
       const pre = await fetch('http://localhost:9999/');
       expect(await pre.text()).toEqual('<html></html>');
     });
-    await step(t, 'should return static content', async _ => {
+    await step(t, 'should return static content', async (_) => {
       const pre = await fetch('http://localhost:9999/awesome/foo.js');
       expect(await pre.text()).toEqual('awesome foo.js content');
     });
 
-    await step(t, 'should return 404 if file does not exit', async _ => {
+    await step(t, 'should return 404 if file does not exit', async (_) => {
       const pre = await fetch(
         'http://localhost:9999/awesome/does-not-exist.js',
       );
@@ -36,7 +36,7 @@ Deno.test('01-static-content-serve', async (t) => {
     await step(
       t,
       'should return 404 if file from different path is watched',
-      async _ => {
+      async (_) => {
         const pre = await fetch('http://localhost:9999/bro/haha.js');
         await pre.blob();
         expect(pre.status).toEqual(404);

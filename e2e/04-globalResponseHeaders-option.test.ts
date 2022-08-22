@@ -19,14 +19,14 @@ Deno.test('04-globalResponseHeaders-option', async (t) => {
     });
 
     await step(t, 'should add global headers to all requests', async (t) => {
-      await step(t, 'existing static content', async _ => {
+      await step(t, 'existing static content', async (_) => {
         const pre = await fetch('http://localhost:9999/awesome/foo.js');
         expect(await pre.text()).toEqual('awesome foo.js content');
         expect(pre.headers.get('foo')).toEqual('bar');
         expect(pre.headers.get('a')).toEqual('b');
       });
 
-      await step(t, 'not found content', async _ => {
+      await step(t, 'not found content', async (_) => {
         const pre = await fetch(
           'http://localhost:9999/awesome/does-not-exist.js',
         );

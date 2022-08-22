@@ -20,7 +20,7 @@ Deno.test('02-custom-middleware-and-routes', async (t) => {
           path: tfm.basePath + 'watchfolder',
         }, ['custom-middleware-add-response-header', 'custom-routes']);
 
-        await step(t, '', async _ => {
+        await step(t, '', async (_) => {
           const pre = await fetch('http://localhost:9999/awesome/foo.js');
           await pre.text();
 
@@ -38,13 +38,13 @@ Deno.test('02-custom-middleware-and-routes', async (t) => {
           t,
           'custom route "/haha" alloed to have get and post',
           async (t) => {
-            await step(t, 'get pass', async _ => {
+            await step(t, 'get pass', async (_) => {
               const pre = await fetch('http://localhost:9999/haha');
               const result = await pre.text();
               expect(result).toEqual('haha');
               expect(pre.status).toEqual(200);
             });
-            await step(t, 'post pass', async _ => {
+            await step(t, 'post pass', async (_) => {
               const pre = await fetch('http://localhost:9999/haha', {
                 method: 'post',
               });
@@ -52,21 +52,21 @@ Deno.test('02-custom-middleware-and-routes', async (t) => {
               expect(result).toEqual('haha');
               expect(pre.status).toEqual(200);
             });
-            await step(t, 'delete ignored', async _ => {
+            await step(t, 'delete ignored', async (_) => {
               const pre = await fetch('http://localhost:9999/haha', {
                 method: 'delete',
               });
               await pre.blob();
               expect(pre.status).toEqual(404);
             });
-            await step(t, 'put ignored', async _ => {
+            await step(t, 'put ignored', async (_) => {
               const pre = await fetch('http://localhost:9999/haha', {
                 method: 'put',
               });
               await pre.blob();
               expect(pre.status).toEqual(404);
             });
-            await step(t, 'patch ignored', async _ => {
+            await step(t, 'patch ignored', async (_) => {
               const pre = await fetch('http://localhost:9999/haha', {
                 method: 'patch',
               });
@@ -79,13 +79,13 @@ Deno.test('02-custom-middleware-and-routes', async (t) => {
           t,
           'custom route can accept any method if no methods are found /any-method',
           async (t) => {
-            await step(t, 'get pass', async _ => {
+            await step(t, 'get pass', async (_) => {
               const pre = await fetch('http://localhost:9999/any-method');
               const result = await pre.text();
               expect(result).toEqual('bro');
               expect(pre.status).toEqual(200);
             });
-            await step(t, 'post pass', async _ => {
+            await step(t, 'post pass', async (_) => {
               const pre = await fetch('http://localhost:9999/any-method', {
                 method: 'post',
               });
@@ -93,7 +93,7 @@ Deno.test('02-custom-middleware-and-routes', async (t) => {
               expect(result).toEqual('bro');
               expect(pre.status).toEqual(200);
             });
-            await step(t, 'put pass', async _ => {
+            await step(t, 'put pass', async (_) => {
               const pre = await fetch('http://localhost:9999/any-method', {
                 method: 'put',
               });
@@ -101,7 +101,7 @@ Deno.test('02-custom-middleware-and-routes', async (t) => {
               expect(result).toEqual('bro');
               expect(pre.status).toEqual(200);
             });
-            await step(t, 'patch pass', async _ => {
+            await step(t, 'patch pass', async (_) => {
               const pre = await fetch('http://localhost:9999/any-method', {
                 method: 'patch',
               });
@@ -109,7 +109,7 @@ Deno.test('02-custom-middleware-and-routes', async (t) => {
               expect(result).toEqual('bro');
               expect(pre.status).toEqual(200);
             });
-            await step(t, 'delete pass', async _ => {
+            await step(t, 'delete pass', async (_) => {
               const pre = await fetch('http://localhost:9999/any-method', {
                 method: 'delete',
               });

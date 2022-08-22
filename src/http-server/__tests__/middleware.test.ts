@@ -31,7 +31,7 @@ Deno.test('middleware runner', async (t) => {
   await step(
     t,
     'workflow: calling next("router") should skip to the next middleware in parent list and ignore the rest',
-    async _ => {
+    async (_) => {
       const a = fn<BaseMiddleware>((_, next) => next());
       const b = fn<BaseMiddleware>((_, next) => next('router'));
       const c = fn<BaseMiddleware>(() => {});
