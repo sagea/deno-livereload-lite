@@ -2,4 +2,8 @@
 
 set -e;
 
+deno task test
+deno task lint
+deno task fmt:check
+deno task typecheck
 deno task e2e
