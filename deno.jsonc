@@ -3,13 +3,17 @@
     "strict": true
   },
   "lint": {
+    "files": {
+      "exclude": ["./e2e/test-artifacts/"]
+    },
     "rules": {
       "tags": ["recommended"]
     }
   },
   "fmt": {
     "files": {
-      "include": ["."]
+      "include": ["."],
+      "exclude": ["./e2e/test-artifacts/"]
     },
     "options": {
       "singleQuote": true,
