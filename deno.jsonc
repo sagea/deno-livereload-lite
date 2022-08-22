@@ -2,8 +2,7 @@
   "rules": {
     "tags": ["recommended"],
     "include": [
-      "ban-untagged-todo",
-      ""
+      "ban-untagged-todo"
     ],
     "exclude": ["no-unused-vars"]
   },
@@ -18,5 +17,9 @@
       "proseWrap": "never",
       "useTabs": false
     }
+  },
+  "tasks": {
+    "test": "deno test -A src/",
+    "test:e2e": "deno test -A e2e/"
   }
 }

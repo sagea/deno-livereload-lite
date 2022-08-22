@@ -7,11 +7,11 @@ live reload with minimal external dependencies
 ### Unit Testint
 
 ```
-deno test -A src/
+deno task test
 ```
 
 ### Functional Tests
 
 ```
-deno test -A e2e/
+deno task e2e
 ```

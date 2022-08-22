@@ -7,12 +7,12 @@ export const clientMiddlewareCreator = (): Middleware => {
       const text = `
         (() => {
           'use strict';
-          const url = new URL(window.location)
+          const url = new URL(window.location.href)
           const wsurl = 'ws://' + url.host + '/livereload/websocket';
           let ws;
           const connect = () => {
             console.log('Attempting to connect to livereload websocket');
-            ws = new WebSocket(wsurl);
+            ws = new window.WebSocket(wsurl);
             ws.addEventListener('open', event => {
               console.log('Connected to livereload websocket');
             })
@@ -29,7 +29,7 @@ export const clientMiddlewareCreator = (): Middleware => {
               console.log('livereload websocket closed', event);
             })
           }
-          setInterval(() => {
+          window.setInterval(() => {
             if (!ws || ws.readyState === WebSocket.CLOSED) {
               connect();
             }

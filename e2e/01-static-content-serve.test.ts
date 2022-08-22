@@ -8,6 +8,7 @@ Deno.test('01-static-content-serve', async (t) => {
     const tfm = new TestFileManager();
     await tfm.start();
     await tfm.add({
+      './watchfolder/index.html': '<html></html>',
       './watchfolder/awesome/foo.js': 'awesome foo.js content',
       './nowatchfolder/bro/haha.js': 'bro haha.js content',
     });
@@ -16,7 +17,10 @@ Deno.test('01-static-content-serve', async (t) => {
       port: 9999,
       path: tfm.basePath + 'watchfolder',
     });
-
+    await step(t, 'should send index.html if path / is provided', async _ => {
+      const pre = await fetch('http://localhost:9999/');
+      expect(await pre.text()).toEqual('<html></html>');
+    });
     await step(t, 'should return static content', async _ => {
       const pre = await fetch('http://localhost:9999/awesome/foo.js');
       expect(await pre.text()).toEqual('awesome foo.js content');
