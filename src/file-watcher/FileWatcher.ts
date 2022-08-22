@@ -7,7 +7,7 @@ export class FileWatcher {
   constructor(
     public path: string,
     public delay: number,
-    public callback: (events: Deno.FsEvent[]) => any,
+    public callback: (events: Deno.FsEvent[]) => void,
   ) {}
   start() {
     this.watcher = nativeWatch(this.path, (event) => {

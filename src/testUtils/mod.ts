@@ -47,7 +47,7 @@ const addLinesToAssertionError = async (
 export const step = (
   t: Deno.TestContext,
   text: string,
-  method: (t: Deno.TestContext) => void | Promise<void>,
+  method: (t: Deno.TestContext) => void,
 ) => {
   return t.step(text, async (t) => {
     try {
@@ -57,7 +57,10 @@ export const step = (
     }
   });
 };
-export const fn = <T extends (...args: any) => any>(fn: T): T => {
+
+// deno-lint-ignore no-explicit-any
+export const fn = <T extends (...args: any[]) => any>(fn: T): T => {
   return mock.fn(fn) as T;
 };
+
 export { expect, mock };

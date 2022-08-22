@@ -1,6 +1,6 @@
 export const nativeWatch = (
   path: string,
-  callback: (e: Deno.FsEvent) => any,
+  callback: (e: Deno.FsEvent) => void,
 ) => {
   const watcher = Deno.watchFs(path);
   (async () => {

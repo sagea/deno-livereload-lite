@@ -42,8 +42,8 @@ Deno.test('06-livereload-client', async (t) => {
         const websocketRefs: WebSocket[] = [];
         const window = {
           location: mockLocation(),
-          setInterval: (a: any, b: any) => {
-            const intervalId = setInterval(a, b);
+          setInterval: (...args: Parameters<typeof setInterval>) => {
+            const intervalId = setInterval(...args);
             intervalIds.push(intervalId);
             return intervalId;
           },
@@ -90,8 +90,8 @@ Deno.test('06-livereload-client', async (t) => {
         const websocketRefs: WebSocket[] = [];
         const window = {
           location: mockLocation(),
-          setInterval: (a: any, b: any) => {
-            const intervalId = setInterval(a, b);
+          setInterval: (...args: Parameters<typeof setInterval>) => {
+            const intervalId = setInterval(...args);
             intervalIds.push(intervalId);
             return intervalId;
           },

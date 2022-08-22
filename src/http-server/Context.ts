@@ -3,10 +3,6 @@ export type ResponseHook = (
   context: Context,
 ) => Response | Promise<Response>;
 
-export interface ContextResponse {
-  body: BodyInit;
-  responseInit: ResponseInit;
-}
 export class Context {
   orig: Deno.RequestEvent;
   url: URL;

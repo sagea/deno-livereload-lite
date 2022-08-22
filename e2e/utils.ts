@@ -67,17 +67,19 @@ export const startServer = async (
       );
       await pre.blob();
       if (pre.status === 418) break;
+      // deno-lint-ignore no-empty
     } catch (_err) {}
     await sleep(500);
   }
   return app;
 };
 
-export const close = async (item?: { close: () => any }) => {
+export const close = async (item?: { close: () => unknown }) => {
   if (!item) return;
   await sleep(500);
   try {
     await item.close();
+    // deno-lint-ignore no-empty
   } catch (_err) {}
   await sleep(500);
 };

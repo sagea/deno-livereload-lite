@@ -3,7 +3,7 @@ export { addResponseHeaders } from './addResponseHeaders.ts';
 export { contentTypeMappings } from './contentTypeMappings.ts';
 
 export { Context } from './Context.ts';
-export type { ContextResponse, ResponseHook } from './Context.ts';
+export type { ResponseHook } from './Context.ts';
 
 export { HttpServer } from './HttpServer.ts';
 export type { HttpServerOptions } from './HttpServer.ts';

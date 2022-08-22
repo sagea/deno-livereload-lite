@@ -4,8 +4,9 @@ import { Context, ResponseHook } from '../Context.ts';
 Deno.test('Context', async (t) => {
   await step(t, 'filePath property should be relative', () => {
     const instance = new Context({
-      request: { url: 'http://localhost:8080/woahdude/haha.js?woah=true' },
-    } as any, (t) => t);
+      request: new Request('http://localhost:8080/woahdude/haha.js?woah=true'),
+      respondWith: fn(async () => {}),
+    }, (t) => t);
     expect(instance.filePath).toEqual('/woahdude/haha.js');
   });
   await step(
@@ -13,11 +14,14 @@ Deno.test('Context', async (t) => {
     'headers property should return original request headers',
     () => {
       const instance = new Context({
-        request: {
-          url: 'http://localhost:8080/woahdude/haha.js?woah=true',
-          headers: new Headers({ a: 'a' }),
-        },
-      } as any, (t) => t);
+        request: new Request(
+          'http://localhost:8080/woahdude/haha.js?woah=true',
+          {
+            headers: new Headers({ a: 'a' }),
+          },
+        ),
+        respondWith: fn(async () => {}),
+      }, (t) => t);
       expect(instance.headers).toBeInstanceOf(Headers);
       expect([...instance.headers]).toEqual([['a', 'a']]);
     },
@@ -30,13 +34,15 @@ Deno.test('Context', async (t) => {
         const mockReturnResponse = new Response('hello');
         const mockGivenResponse = new Response('haha');
         const responseHook = fn<ResponseHook>(() => mockReturnResponse);
-        const requestEvent = {
-          request: {
-            url: 'http://localhost:8080/woahdude/haha.js?woah=true',
-            headers: new Headers({ a: 'a' }),
-          },
-          respondWith: mock.fn(),
-        } as any as Deno.RequestEvent;
+        const requestEvent: Deno.RequestEvent = {
+          request: new Request(
+            'http://localhost:8080/woahdude/haha.js?woah=true',
+            {
+              headers: new Headers({ a: 'a' }),
+            },
+          ),
+          respondWith: fn(async () => {}),
+        };
 
         const ctx = new Context(requestEvent, responseHook);
         await ctx.respondWith(mockGivenResponse);
@@ -66,13 +72,15 @@ Deno.test('Context', async (t) => {
         const responseHook = fn<ResponseHook>(async () =>
           await mockReturnResponse
         );
-        const requestEvent = {
-          request: {
-            url: 'http://localhost:8080/woahdude/haha.js?woah=true',
-            headers: new Headers({ a: 'a' }),
-          },
-          respondWith: mock.fn(),
-        } as any as Deno.RequestEvent;
+        const requestEvent: Deno.RequestEvent = {
+          request: new Request(
+            'http://localhost:8080/woahdude/haha.js?woah=true',
+            {
+              headers: new Headers({ a: 'a' }),
+            },
+          ),
+          respondWith: fn(async () => {}),
+        };
 
         const ctx = new Context(requestEvent, responseHook);
         await ctx.respondWith(mockGivenResponse);
@@ -97,13 +105,15 @@ Deno.test('Context', async (t) => {
     t,
     'workflow: responseHeaders should add headers to response',
     async (_) => {
-      const requestEvent = {
-        request: {
-          url: 'http://localhost:8080/woahdude/haha.js?woah=true',
-          headers: new Headers({ a: 'a' }),
-        },
-        respondWith: mock.fn(),
-      } as any as Deno.RequestEvent;
+      const requestEvent: Deno.RequestEvent = {
+        request: new Request(
+          'http://localhost:8080/woahdude/haha.js?woah=true',
+          {
+            headers: new Headers({ a: 'a' }),
+          },
+        ),
+        respondWith: fn(async () => {}),
+      };
       const response = new Response('huh');
       const ctx = new Context(requestEvent, (t) => t);
       ctx.responseHeaders.set('woah', 'bro');

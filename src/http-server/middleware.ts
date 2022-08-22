@@ -1,7 +1,7 @@
 import { Context } from './Context.ts';
 
-export type NextFunction = (value?: 'router') => any;
-export type BaseMiddleware = (ctx: Context, next: NextFunction) => any;
+export type NextFunction = (value?: 'router') => void;
+export type BaseMiddleware = (ctx: Context, next: NextFunction) => void;
 export type Middleware = BaseMiddleware | Middleware[];
 
 export const middlewareRunner = async (

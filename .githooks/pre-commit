@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e;
+
+deno task test
+deno task lint
+deno task fmt:check
+deno task typecheck

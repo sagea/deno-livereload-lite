@@ -1,6 +1,12 @@
 import { expect, fn, step } from '../../testUtils/mod.ts';
 import { BaseMiddleware, middlewareRunner } from '../middleware.ts';
-
+import { Context } from '../Context.ts';
+const mockContext = () => {
+  return new Context({
+    request: new Request('http://localhost:9999/woah.js'),
+    respondWith: fn(async () => {}),
+  }, (a) => a);
+};
 Deno.test('middleware runner', async (t) => {
   await step(
     t,
@@ -8,7 +14,7 @@ Deno.test('middleware runner', async (t) => {
     async () => {
       const middleware1 = fn<BaseMiddleware>(() => {});
       const middleware2 = fn<BaseMiddleware>(() => {});
-      await middlewareRunner([middleware1, middleware2], {} as any);
+      await middlewareRunner([middleware1, middleware2], mockContext());
       expect(middleware1).toHaveBeenCalled();
       expect(middleware2).not.toHaveBeenCalled();
     },
@@ -22,7 +28,7 @@ Deno.test('middleware runner', async (t) => {
         next();
       });
       const middleware2 = fn<BaseMiddleware>(() => {});
-      await middlewareRunner([middleware1, middleware2], {} as any);
+      await middlewareRunner([middleware1, middleware2], mockContext());
       expect(middleware1).toHaveBeenCalled();
       expect(middleware2).toHaveBeenCalled();
     },
@@ -48,7 +54,7 @@ Deno.test('middleware runner', async (t) => {
         a,
         [b, c],
         [d, [e, f]],
-      ], {} as any);
+      ], mockContext());
       expect(a).toHaveBeenCalled();
       expect(b).toHaveBeenCalled();
       expect(c).not.toHaveBeenCalled();

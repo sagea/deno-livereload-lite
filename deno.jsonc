@@ -4,8 +4,7 @@
   },
   "lint": {
     "rules": {
-      "tags": ["recommended"],
-      "exclude": ["no-explicit-any"]
+      "tags": ["recommended"]
     }
   },
   "fmt": {
@@ -21,7 +20,7 @@
     }
   },
   "tasks": {
-    "setup": "deno run -A ./setup.ts",
+    "setup": "git config --local core.hooksPath .githooks",
     "test": "deno test -A src/",
     "test:e2e": "deno test -A e2e/",
     "lint": "deno lint;",

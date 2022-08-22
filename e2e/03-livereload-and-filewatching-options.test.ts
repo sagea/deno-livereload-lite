@@ -26,7 +26,7 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
           'ws://localhost:9999/livereload/websocket',
         );
 
-        let events: any[] = [];
+        let events: string[] = [];
         websocket.onmessage = (e) => events.push(e.data);
         await sleep(500);
         await step(t, 'update file', async (_) => {
@@ -70,7 +70,7 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
         const websocket = new WebSocket(
           'ws://localhost:9999/livereload/websocket',
         );
-        let events: any[] = [];
+        let events: string[] = [];
         websocket.onmessage = (e) => events.push(e.data);
         await sleep(500);
         await step(
