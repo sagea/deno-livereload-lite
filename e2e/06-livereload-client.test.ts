@@ -1,6 +1,6 @@
 import { expect, fn, step } from '../src/testUtils/mod.ts';
-import { ensureDir } from 'https://deno.land/std@0.152.0/fs/mod.ts';
-import { close, sleep, startServer, TestFileManager } from './utils.ts';
+import { copy } from 'https://deno.land/std@0.152.0/fs/mod.ts';
+import { close, sleep, startServer } from './utils.ts';
 
 const mockLocation = () => {
   return {
@@ -19,20 +19,15 @@ const mockLocation = () => {
   };
 };
 Deno.test('06-livereload-client', async (t) => {
-  await ensureDir('./e2e/test-artifacts');
-  const tfm = new TestFileManager();
-  await tfm.start();
-  await tfm.add({
-    './watchfolder/awesome/foo.js': 'awesome foo.js content',
-    './nowatchfolder/bro/haha.js': 'bro haha.js content',
-  });
+  const BASE = `./e2e/test-artifacts/${Math.random()}`;
+  await copy(`./e2e/test-artifacts/base`, BASE);
   await step(
     t,
     'should reload the window whenever a file changes',
     async (t) => {
       const process = await startServer({
         port: 9999,
-        path: tfm.basePath + 'watchfolder',
+        path: BASE + '/public',
       }, []);
 
       await step(t, '', async (_) => {
@@ -58,7 +53,10 @@ Deno.test('06-livereload-client', async (t) => {
         eval(content);
 
         await sleep(2000);
-        await tfm.addFile('./watchfolder/awesome/foo.js', 'data2');
+        await Deno.writeTextFile(
+          BASE + '/public/deep/deep-test.js',
+          Math.random().toString(),
+        );
         await sleep(500);
         expect(window.location.reload).toHaveBeenCalled();
         await sleep(200);
@@ -66,9 +64,7 @@ Deno.test('06-livereload-client', async (t) => {
           clearInterval(intervalId);
         }
         await sleep(500);
-        for (const websocketRef of websocketRefs) {
-          await close(websocketRef);
-        }
+        await close(...websocketRefs);
         await sleep(500);
       });
       await close(process);
@@ -81,7 +77,7 @@ Deno.test('06-livereload-client', async (t) => {
       await step(t, '', async (_) => {
         const serverProcess1 = await startServer({
           port: 9999,
-          path: tfm.basePath + 'watchfolder',
+          path: BASE + '/public',
         }, []);
 
         const pre = await fetch('http://localhost:9999/livereload/client.js');
@@ -113,11 +109,14 @@ Deno.test('06-livereload-client', async (t) => {
 
         const serverProcess2 = await startServer({
           port: 9999,
-          path: tfm.basePath + 'watchfolder',
+          path: BASE + '/public',
         }, []);
         await sleep(2000);
         expect(websocketRefs.length).toBeGreaterThan(1);
-        await tfm.addFile('./watchfolder/awesome/foo.js', 'data2');
+        await Deno.writeTextFile(
+          BASE + '/public/deep/deep-test.js',
+          Math.random().toString(),
+        );
         await sleep(500);
         expect(window.location.reload).toHaveBeenCalled();
         await sleep(200);
@@ -125,13 +124,11 @@ Deno.test('06-livereload-client', async (t) => {
           clearInterval(intervalId);
         }
         await sleep(500);
-        for (const websocketRef of websocketRefs) {
-          await close(websocketRef);
-        }
+        await close(...websocketRefs);
         await sleep(500);
         await close(serverProcess2);
       });
     },
   );
-  await tfm.end();
+  await Deno.remove(BASE, { recursive: true });
 });

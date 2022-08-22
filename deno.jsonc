@@ -22,7 +22,7 @@
   "tasks": {
     "setup": "git config --local core.hooksPath .githooks",
     "test": "deno test -A src/",
-    "test:e2e": "deno test -A e2e/",
+    "e2e": "deno test -A e2e/",
     "lint": "deno lint;",
     "format": "deno fmt",
     "fmt:check": "deno fmt --check",

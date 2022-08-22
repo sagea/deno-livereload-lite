@@ -1,25 +1,18 @@
 import { expect, step } from '../src/testUtils/mod.ts';
-import { ensureDir } from 'https://deno.land/std@0.152.0/fs/mod.ts';
-import { close, sleep, startServer, TestFileManager } from './utils.ts';
+import { copy } from 'https://deno.land/std@0.152.0/fs/mod.ts';
+import { close, sleep, startServer } from './utils.ts';
 
 Deno.test('03-livereload-and-filewatching-options', async (t) => {
-  await ensureDir('./e2e/test-artifacts');
+  const BASE = `./e2e/test-artifacts/${Math.random()}`;
+  await copy(`./e2e/test-artifacts/base`, BASE);
   await step(t, 'should watch for file changes based on path', async (t) => {
-    const tfm = new TestFileManager();
-    await tfm.start();
-    await step(t, 'create files', async () => {
-      await tfm.add({
-        './watchfolder/awesome/foo.js': 'data',
-        './nowatchfolder/bro/haha.js': 'data',
-      });
-    });
     await step(
       t,
       'should accept websocket connections and fire change event',
       async (t) => {
         const process = await startServer({
           port: 9999,
-          path: tfm.basePath + 'watchfolder',
+          path: BASE + '/public',
         });
 
         const websocket = new WebSocket(
@@ -30,25 +23,25 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
         websocket.onmessage = (e) => events.push(e.data);
         await sleep(500);
         await step(t, 'update file', async (_) => {
-          await tfm.addFile('./watchfolder/awesome/foo.js', 'data2');
+          await Deno.writeTextFile(BASE + '/public/deep/deep-test.js', 'data2');
           await sleep(500);
           expect(events).toEqual(['change-detected']);
           events = [];
         });
         await step(t, 'add new file', async (_) => {
-          await tfm.addFile('./watchfolder/awesome/newfile.js', 'data');
+          await Deno.writeTextFile(BASE + '/public/deep/newfile.js', 'data2');
           await sleep(500);
           expect(events).toEqual(['change-detected']);
           events = [];
         });
         await step(t, 'delete file', async (_) => {
-          await tfm.deleteFile('./watchfolder/awesome/newfile.js');
+          await Deno.remove(BASE + '/public/deep/newfile.js');
           await sleep(500);
           expect(events).toEqual(['change-detected']);
           events = [];
         });
         await step(t, 'update non watched file', async (_) => {
-          await tfm.deleteFile('./nowatchfolder/bro/haha.js');
+          await Deno.writeTextFile(BASE + '/not-public/other.js', 'woah');
           await sleep(500);
           expect(events).toEqual([]);
           events = [];
@@ -63,8 +56,8 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
       async (t) => {
         const process = await startServer({
           port: 9999,
-          path: tfm.basePath + 'watchfolder',
-          watchPath: tfm.basePath + 'watchfolder/awesome',
+          path: BASE + '/public',
+          watchPath: BASE + '/public/deep',
         });
 
         const websocket = new WebSocket(
@@ -77,7 +70,10 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
           t,
           'should watch for changes inside of custom watchPath',
           async (_) => {
-            await tfm.addFile('./watchfolder/awesome/foo.js', 'data2');
+            await Deno.writeTextFile(
+              BASE + '/public/deep/deep-test.js',
+              'data2',
+            );
             await sleep(500);
             expect(events).toEqual(['change-detected']);
             events = [];
@@ -87,7 +83,7 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
           t,
           'should ignore file in path but outside of watchPath',
           async (_) => {
-            await tfm.addFile('./watchfolder/woah.js', 'data');
+            await Deno.writeTextFile(BASE + '/public/a.js', 'data2');
             await sleep(500);
             expect(events).toEqual([]);
             events = [];
@@ -97,34 +93,6 @@ Deno.test('03-livereload-and-filewatching-options', async (t) => {
         await close(process);
       },
     );
-    await tfm.end();
   });
-  await step(
-    t,
-    'should serve a livereload client script on /livereload/client',
-    async (t) => {
-      const tfm = new TestFileManager();
-      await tfm.start();
-      await step(t, 'create files', async () => {
-        await tfm.add({
-          './watchfolder/awesome/foo.js': 'data',
-          './nowatchfolder/bro/haha.js': 'data',
-        });
-      });
-      await step(t, 'action', async (_) => {
-        const process = await startServer({
-          port: 9999,
-          path: tfm.basePath + 'watchfolder',
-          watchPath: tfm.basePath + 'watchfolder/awesome',
-        });
-
-        const pre = await fetch('http://localhost:9999/livereload/client.js');
-        const text = await pre.text();
-        expect(pre.status).toEqual(200);
-        expect(text.length).toBeGreaterThan(10);
-        await close(process);
-      });
-      await tfm.end();
-    },
-  );
+  await Deno.remove(BASE, { recursive: true });
 });

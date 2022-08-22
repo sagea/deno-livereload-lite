@@ -1,27 +1,22 @@
 import { expect, step } from '../src/testUtils/mod.ts';
-import { ensureDir } from 'https://deno.land/std@0.152.0/fs/mod.ts';
-import { close, startServer, TestFileManager } from './utils.ts';
+import { copy } from 'https://deno.land/std@0.152.0/fs/mod.ts';
+import { close, startServer } from './utils.ts';
 
 Deno.test('02-custom-middleware-and-routes', async (t) => {
-  await ensureDir('./e2e/test-artifacts');
+  const BASE = `./e2e/test-artifacts/${Math.random()}`;
+  await copy(`./e2e/test-artifacts/base`, BASE);
   await step(
     t,
     'should be able to define custom middleware an custom routes',
     async (t) => {
-      const tfm = new TestFileManager();
-      await tfm.start();
-      await tfm.add({
-        './watchfolder/awesome/foo.js': 'data',
-        './nowatchfolder/bro/haha.js': 'data',
-      });
       await step(t, 'custom middleware', async (t) => {
         const process = await startServer({
           port: 9999,
-          path: tfm.basePath + 'watchfolder',
+          path: BASE + '/public',
         }, ['custom-middleware-add-response-header', 'custom-routes']);
 
         await step(t, '', async (_) => {
-          const pre = await fetch('http://localhost:9999/awesome/foo.js');
+          const pre = await fetch('http://localhost:9999/a.js');
           await pre.text();
 
           expect(pre.headers.has('woah')).toEqual(true);
@@ -32,7 +27,7 @@ Deno.test('02-custom-middleware-and-routes', async (t) => {
       await step(t, 'custom routes', async (t) => {
         const process = await startServer({
           port: 9999,
-          path: tfm.basePath + 'watchfolder',
+          path: BASE + '/public',
         }, ['custom-middleware-add-response-header', 'custom-routes']);
         await step(
           t,
@@ -121,7 +116,7 @@ Deno.test('02-custom-middleware-and-routes', async (t) => {
         );
         await close(process);
       });
-      await tfm.end();
     },
   );
+  await Deno.remove(BASE, { recursive: true });
 });

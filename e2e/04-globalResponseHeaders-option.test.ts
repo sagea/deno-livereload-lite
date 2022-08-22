@@ -1,27 +1,21 @@
 import { expect, step } from '../src/testUtils/mod.ts';
-import { ensureDir } from 'https://deno.land/std@0.152.0/fs/mod.ts';
-import { close, startServer, TestFileManager } from './utils.ts';
+import { copy } from 'https://deno.land/std@0.152.0/fs/mod.ts';
+import { close, startServer } from './utils.ts';
 
 Deno.test('04-globalResponseHeaders-option', async (t) => {
-  await ensureDir('./e2e/test-artifacts');
+  const BASE = `./e2e/test-artifacts/${Math.random()}`;
+  await copy(`./e2e/test-artifacts/base`, BASE);
   await step(t, 'should serve static content', async (t) => {
-    const tfm = new TestFileManager();
-    await tfm.start();
-    await tfm.add({
-      './watchfolder/awesome/foo.js': 'awesome foo.js content',
-      './nowatchfolder/bro/haha.js': 'bro haha.js content',
-    });
-
     const process = await startServer({
       port: 9999,
-      path: tfm.basePath + 'watchfolder',
+      path: BASE + '/public',
       globalResponseHeaders: { foo: 'bar', a: 'b' },
     });
 
     await step(t, 'should add global headers to all requests', async (t) => {
       await step(t, 'existing static content', async (_) => {
-        const pre = await fetch('http://localhost:9999/awesome/foo.js');
-        expect(await pre.text()).toEqual('awesome foo.js content');
+        const pre = await fetch('http://localhost:9999/deep/deep-test.js');
+        expect(await pre.text()).toEqual(`console.log('deep-test.js');`);
         expect(pre.headers.get('foo')).toEqual('bar');
         expect(pre.headers.get('a')).toEqual('b');
       });
@@ -38,6 +32,6 @@ Deno.test('04-globalResponseHeaders-option', async (t) => {
     });
 
     await close(process);
-    await tfm.end();
   });
+  await Deno.remove(BASE, { recursive: true });
 });
