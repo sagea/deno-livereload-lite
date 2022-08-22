@@ -52,20 +52,17 @@ Deno.test('06-livereload-client', async (t) => {
 
         eval(content);
 
-        await sleep(2000);
+        await sleep(1000);
         await Deno.writeTextFile(
           BASE + '/public/deep/deep-test.js',
           Math.random().toString(),
         );
         await sleep(500);
         expect(window.location.reload).toHaveBeenCalled();
-        await sleep(200);
         for (const intervalId of intervalIds) {
           clearInterval(intervalId);
         }
-        await sleep(500);
         await close(...websocketRefs);
-        await sleep(500);
       });
       await close(process);
     },
@@ -100,18 +97,14 @@ Deno.test('06-livereload-client', async (t) => {
         };
 
         eval(content);
-
-        await sleep(2000);
+        await sleep(1000);
         expect(websocketRefs.length).toEqual(1);
         await close(serverProcess1);
-
-        await sleep(2000);
 
         const serverProcess2 = await startServer({
           port: 9999,
           path: BASE + '/public',
         }, []);
-        await sleep(2000);
         expect(websocketRefs.length).toBeGreaterThan(1);
         await Deno.writeTextFile(
           BASE + '/public/deep/deep-test.js',
@@ -123,9 +116,7 @@ Deno.test('06-livereload-client', async (t) => {
         for (const intervalId of intervalIds) {
           clearInterval(intervalId);
         }
-        await sleep(500);
         await close(...websocketRefs);
-        await sleep(500);
         await close(serverProcess2);
       });
     },
